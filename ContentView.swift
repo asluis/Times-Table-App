@@ -8,9 +8,15 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State var showingSettings = false
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        Button("Show settings"){
+            self.showingSettings = true
+        }.sheet(isPresented: $showingSettings){
+            Player_Settings()
+        }
     }
 }
 
@@ -19,3 +25,6 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
+
+
+
