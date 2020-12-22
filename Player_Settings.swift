@@ -9,11 +9,12 @@ import SwiftUI
 
 struct Player_Settings: View {
     
-    @Environment(\.presentationMode) var presentationMode
     @State var timesTable = 3
     @State var selection = 0
+    @Environment(\.presentationMode) var presentationMode
+
     
-    @ObservedObject var settings = Settings()
+    @ObservedObject var settings:Settings
     
     var body: some View {
         NavigationView{
@@ -24,8 +25,10 @@ struct Player_Settings: View {
                 
                 Section(header: Text("Number of questions to practice with")){
                     Picker("", selection: $selection){
-                        //
-                    }
+                        ForEach(0..<settings.qOptions.count, id: \.self) { i in
+                            Text("\(settings.qOptions[i])")
+                        }
+                    }.pickerStyle(SegmentedPickerStyle())
                 }
                 
 
@@ -34,6 +37,8 @@ struct Player_Settings: View {
                 .navigationBarItems(leading:
                     Button(action: {
                         print("Back button pressed")
+                        settings.selection = self.selection
+                        settings.timesTableSize = self.timesTable
                         self.presentationMode.wrappedValue.dismiss()
                     }){
                         Image(systemName: "chevron.backward")
@@ -46,39 +51,11 @@ struct Player_Settings: View {
 
 struct Player_Settings_Previews: PreviewProvider {
     static var previews: some View {
-        Player_Settings()
+        Player_Settings(settings:  Settings())
     }
 }
 
-class Settings: ObservableObject{
-    let qOptions = ["5", "10", "15", "all"]
-    
-    @Published var selection = 0
-    
-    
-    
-    
-}
 
 
-struct Question{
-    var num1 = 0
-    var num2 = 0
-    var q:String{
-        return "What is \(num1) x \(num2)? "
-    }
-    
-    var ans:Int{
-        return num1 * num2
-    }
-    
-    
-    func checkResponse(result:Int) -> Bool{
-        return result == ans
-    }
-    
-    init(num1:Int, num2:Int){
-        self.num1 = num1
-        self.num2 = num2
-    }
-}
+
+
