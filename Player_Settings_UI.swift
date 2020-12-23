@@ -9,8 +9,6 @@ import SwiftUI
 
 struct Player_Settings: View {
     
-    @State var timesTable = 3
-    @State var selection = 0
     @Environment(\.presentationMode) var presentationMode
 
     
@@ -20,11 +18,11 @@ struct Player_Settings: View {
         NavigationView{
             Form{
                 Section(header: Text("times table to practice with")){
-                    Stepper("\(timesTable) x \(timesTable) table", value: $timesTable, in: 3...12)
+                    Stepper("\(settings.timesTableSize) x \(settings.timesTableSize) table", value: $settings.timesTableSize, in: 3...12)
                 }
                 
                 Section(header: Text("Number of questions to practice with")){
-                    Picker("", selection: $selection){
+                    Picker("", selection: $settings.selection){
                         ForEach(0..<settings.qOptions.count, id: \.self) { i in
                             Text("\(settings.qOptions[i])")
                         }
@@ -37,8 +35,6 @@ struct Player_Settings: View {
                 .navigationBarItems(leading:
                     Button(action: {
                         print("Back button pressed")
-                        settings.selection = self.selection
-                        settings.timesTableSize = self.timesTable
                         self.presentationMode.wrappedValue.dismiss()
                     }){
                         Image(systemName: "chevron.backward")
